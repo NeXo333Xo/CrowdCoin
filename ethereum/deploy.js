@@ -6,7 +6,7 @@ const compiledFactory = require("./build/CampaignFactory.json");
 
 const provider = new HDWalletProvider(
   process.env.MNEMONIC,
-  process.env.SEPOLIA_RPC_URL
+  process.env.NEXT_PUBLIC_SEPOLIA_RPC_URL
 );
 const web3 = new Web3(provider);
 
