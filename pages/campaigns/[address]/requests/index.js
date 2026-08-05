@@ -5,13 +5,15 @@ import Link from "next/link";
 import RequestRow from "../../../../components/RequestRow";
 
 function RequestsIndex({ address, requests, requestCount, contributorsCount }) {
-
   return (
     <>
       <div className="flex mb-5">
         <h1 className="text-3xl">Request-List</h1>
-        <Link href={`/campaigns/${address}/requests/new`}>
-          <a className="btn btn-info ml-auto">Create a Request</a>
+        <Link
+          className="btn btn-info ml-auto"
+          href={`/campaigns/${address}/requests/new`}
+        >
+          Create a Request
         </Link>
       </div>
       <div className="overflow-x-auto">
@@ -20,7 +22,7 @@ function RequestsIndex({ address, requests, requestCount, contributorsCount }) {
           <thead>
             <tr>
               <th></th>
-    
+
               <th>Description</th>
               <th>Amount</th>
               <th>Recipient</th>
@@ -32,7 +34,13 @@ function RequestsIndex({ address, requests, requestCount, contributorsCount }) {
 
           <tbody>
             {requests.map((request, index) => (
-                <RequestRow key={index} index={index} address={address} request={request}  contributorsCount={contributorsCount} />
+              <RequestRow
+                key={index}
+                index={index}
+                address={address}
+                request={request}
+                contributorsCount={contributorsCount}
+              />
             ))}
           </tbody>
         </table>
@@ -55,20 +63,20 @@ RequestsIndex.getInitialProps = async (props) => {
       }),
   );
 
-      const serializedRequests = requests.map(request => ({
-      description: request.description,
-      value: request.value.toString(),
-      recipient: request.recipient,
-      complete: request.complete,
-      approvalCount: request.approvalCount.toString()
-    }));
- 
-    return { 
-      address, 
-      requests: serializedRequests, 
-      requestCount: requestCount.toString(),
-      contributorsCount: contributorsCount.toString(),
-    };
-}
+  const serializedRequests = requests.map((request) => ({
+    description: request.description,
+    value: request.value.toString(),
+    recipient: request.recipient,
+    complete: request.complete,
+    approvalCount: request.approvalCount.toString(),
+  }));
+
+  return {
+    address,
+    requests: serializedRequests,
+    requestCount: requestCount.toString(),
+    contributorsCount: contributorsCount.toString(),
+  };
+};
 
 export default RequestsIndex;

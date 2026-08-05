@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630" role="img" aria-label="Games">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#c084fc"/>
+      <stop offset="100%" stop-color="#5b21b6"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <circle cx="1010" cy="90" r="240" fill="#ffffff" opacity="0.09"/>
+  <circle cx="150" cy="560" r="190" fill="#000000" opacity="0.10"/>
+  <g transform="translate(490 150) scale(2.2)" fill="none" stroke="#ffffff" color="#ffffff"
+     stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.95">
+  <rect x="10" y="32" width="80" height="42" rx="19"/>
+  <path d="M28 46v14M21 53h14"/>
+  <circle cx="68" cy="47" r="5" fill="currentColor" stroke="none"/>
+  <circle cx="78" cy="59" r="5" fill="currentColor" stroke="none"/>
+  </g>
+  <text x="600" y="520" text-anchor="middle" fill="#ffffff" opacity="0.92"
+        font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif"
+        font-size="52" font-weight="700" letter-spacing="1">Games</text>
+</svg>

@@ -18,7 +18,7 @@ beforeEach(async () => {
     .deploy({ data: compiledFactory.evm.bytecode.object })
     .send({ from: accounts[0], gas: "10000000" })
 
-    await factory.methods.createCampaign("100").send({
+    await factory.methods.createCampaign("100", "0").send({
         from: accounts[0], 
         gas: "10000000"
     });
@@ -37,6 +37,12 @@ describe("Campaigns", () => {
         assert.ok(factory.options.address);
         assert.ok(campaign.options.address);
     });
+
+    it("adds the correct category", async () =>{
+        const category = await campaign.methods.category().call();
+        console.log("This is the category: " + category)
+        assert.equal(category, "0")
+    })
 
     it("marks creator as the campaign manager", async () => {
         const manager = await campaign.methods.manager().call();
@@ -64,7 +70,7 @@ describe("Campaigns", () => {
             assert(err);
         };
     });
-    /* Compiler Problem wegen alter Sol Version im Video
+    /* Compiler Problem 
 
     it("allows a manager to execute createRequest", async () => {
         const receipt = await campaign.methods.createRequest(

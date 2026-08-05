@@ -1,7 +1,6 @@
 import react, { useState } from "react";
 import web3 from "../../../../ethereum/web3";
 import Campaign from "../../../../ethereum/campaign";
-import Link from "next/link";
 
 function RequestNew({ address }) {
   const [description, setDescription] = useState("");
@@ -19,7 +18,7 @@ function RequestNew({ address }) {
       const accounts = await web3.eth.getAccounts();
       const wei = web3.utils.toWei(value, "ether");
 
-      const campaign = new Campaign(address);
+      const campaign = Campaign(address);
       await campaign.methods.createRequest(description, wei, recipient).send({
         from: accounts[0]
       });

@@ -1,5 +1,5 @@
 import React, { Component, useState } from "react";
-import Campaign from "../ethereum/campaign";
+import Campaign  from "../ethereum/campaign";
 import web3 from "../ethereum/web3";
 
 function Contribute({ address, onSuccess }) {
@@ -16,7 +16,7 @@ function Contribute({ address, onSuccess }) {
       const accounts = await web3.eth.getAccounts();
       const wei = web3.utils.toWei(contribution, "ether")
 
-      const campaign = new Campaign(address);
+      const campaign = Campaign(address);
       await campaign.methods.contribute().send({
         from: accounts[0],
         value: wei
@@ -45,7 +45,7 @@ function Contribute({ address, onSuccess }) {
           <div className="join w-full">
             <input
               className="input join-item w-full"
-              placeholder="100"
+              placeholder="1"
               value={contribution}
               onChange={(e) => setContribution(e.target.value)}
             />

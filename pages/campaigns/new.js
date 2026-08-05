@@ -2,22 +2,25 @@ import React, { Component, useState } from "react";
 import factory from "../../ethereum/factory";
 import web3 from "../../ethereum/web3";
 import { useRouter } from "next/router";
+import { CATEGORIES } from "../../lib/categories"
 
 const CampaignNew = () => {
   const router = useRouter();
   const [minimumContribution, setMinimumContribution] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [category, setCategory] = useState("0");
 
   const onSubmit = async (event) => {
     event.preventDefault();
     setError("");
     setLoading(true);
+    console.log("This is category: ", category);
 
     try {
       const accounts = await web3.eth.getAccounts();
       const wei = web3.utils.toWei(minimumContribution, "ether");
-      await factory.methods.createCampaign(wei).send({
+      await factory.methods.createCampaign(wei, category).send({
         from: accounts[0],
       });
       setMinimumContribution("");
@@ -33,7 +36,25 @@ const CampaignNew = () => {
       <div className="p-5 border rounded-xl">
         <div className="card bg-base-100 max-w">
           <div className="card-body">
-            <h2 className="card-title text-2xl">Create a Campaign</h2>
+            <h2 className="card-title text-2xl mb-3">Create a Campaign</h2>
+
+            <label className="label flex flex-col items-start gap-1 w-full cursor-pointer">
+              <span className="label-text">
+                Campaign Category
+              </span>
+              <select
+                value={category}
+                onChange={(e) => setCategory(e.target.value)}
+                className="select w-full"
+              >
+                <option disabled={true}>Campaign Category</option>
+                {CATEGORIES.map((name, id) => (
+                  <option key={name} value={id}>
+                    {name}
+                  </option>
+                ))}
+              </select>
+            </label>
 
             <label className="label">
               <span className="label-text">
@@ -44,7 +65,7 @@ const CampaignNew = () => {
             <div className="join w-full">
               <input
                 className="input join-item w-full"
-                placeholder="100"
+                placeholder="0.1"
                 value={minimumContribution}
                 onChange={(e) => setMinimumContribution(e.target.value)}
               />

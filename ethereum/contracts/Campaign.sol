@@ -1,11 +1,16 @@
 // SPDX-License-Identifier: MIT
-pragma solidity 0.8.36;
+pragma solidity ^0.8.24;
+
+enum Category {
+    other, technology, games, art_design, music, film_video, publishing,
+    food_drink, community, education, health, environment, sports
+}
 
 contract CampaignFactory {
     address[] public deployedCampaigns;
 
-    function createCampaign(uint minimum) public {
-        Campaign newCampaign = new Campaign(minimum, msg.sender);
+    function createCampaign(uint minimum, Category category) public {
+        Campaign newCampaign = new Campaign(msg.sender, minimum,  category);
         deployedCampaigns.push(address(newCampaign));
     }
 
@@ -15,10 +20,10 @@ contract CampaignFactory {
 }
 
 contract Campaign {
-
     Request[] public requests;
     address public manager;
     uint public minimumContribution;
+    Category public immutable category;
     mapping(address => bool) public contributors;
     uint public contributorsCount;
 
@@ -31,9 +36,10 @@ contract Campaign {
         mapping(address => bool) approvals;
     }
     
-    constructor(uint minimum, address creator) {
-        manager = creator;
-        minimumContribution = minimum;
+    constructor(address _creator, uint _minimum, Category _category) {
+        manager = _creator;
+        minimumContribution = _minimum;
+        category = _category;
     }
 
     function contribute() public payable {
@@ -54,18 +60,6 @@ contract Campaign {
         newRequest.recipient = recipient;
         newRequest.complete = false;
         newRequest.approvalCount = 0;
-        
-        /*
-        Request memory newRequest = Request({
-            description: description,
-            value: value,
-            recipient: recipient,
-            complete: false,
-            approvalCount: 0
-        });
-
-        requests.push(newRequest);
-        */
     }
 
     function approveRequest(uint index) public  {

@@ -1,7 +1,9 @@
 import React from "react";
 import factory from "../ethereum/factory";
-import Layout from "../components/Layout.js"
+import Campaign from "../ethereum/campaign";
+import Layout from "../components/Layout.js";
 import Link from "next/link";
+import { CATEGORIES } from "../lib/categories";
 
 function CampaignIndex({ campaigns }) {
   return (
@@ -9,42 +11,61 @@ function CampaignIndex({ campaigns }) {
       <h1 className="text-3xl">Campaigns Index</h1>
       <p className="mb-3">Create projects that people can donate ETH to!</p>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3  gap-4 w-full">
-        <Link href="/campaigns/new">
-          <a className="col-start-1 btn btn-dash h-100 text-xl">Create Campaign</a>
+        <Link
+          className="col-start-1 btn btn-dash h-full text-xl"
+          href="/campaigns/new"
+        >
+          Create Campaign
         </Link>
 
-        {campaigns.map(address => (
-        <div key={address} className="card bg-base-100 shadow-sm border">
-            <Link href={`/campaigns/${address}`}>
-            <a>
+        {campaigns.map((campaign) => (
+          <div
+            key={campaign.address}
+            className="card bg-base-100 shadow-sm border"
+          >
+            <Link href={`/campaigns/${campaign.address}`}>
               <img
-                src="https://img.daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.webp"
-                alt="Shoes"
+                src={`/categories/${campaign.category}.svg`}
+                alt={CATEGORIES[campaign.category]}
               />
-            </a>
             </Link>
-          
-          <div className="card-body">
-            <h2 className="card-title text-xl">Campaign title</h2>
-            <p>{address.description} </p>
-            <p>{address.minimumContribution} </p>
-            <p>{address.contributionCount} </p>
-            
-            <Link href={`/campaigns/${address}`}>
-              <a className="btn btn-primary">Join</a>
-            </Link>
+
+            <div className="card-body">
+              <p className="break-all">{campaign.address} </p>
+              <p>Contributors: {campaign.contributorsCount} </p>
+              <Link
+                className="btn btn-primary"
+                href={`/campaigns/${campaign.address}`}
+              >
+                Join
+              </Link>
+            </div>
           </div>
-        </div>
         ))}
-        
       </div>
     </>
   );
 }
 
 CampaignIndex.getInitialProps = async () => {
-  const campaigns = await factory.methods.getDeployedCampaigns().call();
-  
+  const addresses = await factory.methods.getDeployedCampaigns().call();
+
+  const campaigns = await Promise.all(
+    addresses.map(async (address) => {
+      const campaign = Campaign(address);
+
+      const [category, contributorsCount] = await Promise.all([
+        campaign.methods.category().call(),
+        campaign.methods.contributorsCount().call(),
+      ]);
+
+      return {
+        address,
+        category: Number(category),
+        contributorsCount: Number(contributorsCount),
+      };
+    }),
+  );
 
   return { campaigns };
 };
